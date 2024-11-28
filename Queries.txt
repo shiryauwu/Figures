@@ -1,0 +1,32 @@
+-- Создаёт таблицу "Продукт".
+CREATE TABLE Product (
+	Id UNIQUEIDENTIFIER PRIMARY KEY NOT NULL DEFAULT(NEWID()),
+	ProductName NVARCHAR(100) NOT NULL
+)
+
+-- Создаёт таблицу "Категория".
+CREATE TABLE Category (
+	Id UNIQUEIDENTIFIER PRIMARY KEY NOT NULL DEFAULT(NEWID()),
+	CategoryName NVARCHAR(100) NOT NULL
+)
+
+-- Создаёт таблицу "Продукты и Категории"
+CREATE TABLE ProductCategory(
+	Id UNIQUEIDENTIFIER PRIMARY KEY NOT NULL DEFAULT(NEWID()),
+	ProductId UNIQUEIDENTIFIER,
+	CategoryId UNIQUEIDENTIFIER,
+
+	FOREIGN KEY(ProductId) REFERENCES Product(Id) ON DELETE CASCADE,
+	FOREIGN KEY(CategoryId) REFERENCES Category(Id) ON DELETE CASCADE
+)
+
+-- Выбирает продукты и категории.
+SELECT TOP(100)
+	p.[ProductName],
+	c.[CategoryName]
+FROM ProductCategory AS pc
+LEFT JOIN Product AS p 
+	ON pc.[ProductId] = p.[Id]
+FULL JOIN Category AS c
+	ON pc.[CategoryId] = c.[Id]
+
